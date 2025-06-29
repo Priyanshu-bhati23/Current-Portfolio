@@ -1,26 +1,47 @@
+/* global.css */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* 1️⃣ Custom dark variant: toggles via .dark class on <html> or ancestors */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 2️⃣ Define design tokens and CSS variables for theming */
+@theme {
+  --color-lightTheme: #ffffff;
+  --color-darkTheme: #11001F;
+  --color-lightHover: #fcf4ff;
+  --color-darkHover: #2a004a;
+  --font-Outfit: "Outfit", sans-serif;
+  --font-Ovo: "Ovo", serif;
+  --box-shadow-black: 4px 4px 0 #000;
+  --box-shadow-white: 4px 4px 0 #fff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* 3️⃣ Override variables when .dark class is present */
+@layer base {
+  .dark {
+    --color-lightTheme: #11001F;
+    --color-darkTheme: #ffffff;
+    --color-lightHover: #2a004a;
+    --color-darkHover: #fcf4ff;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* 4️⃣ Apply root-level theming using CSS vars */
+  html {
+    font-family: var(--font-Outfit);
+    background-color: var(--color-lightTheme);
+    color: var(--color-darkHover);
+  }
+  .dark html {
+    background-color: var(--color-darkTheme);
+    color: var(--color-lightHover);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 5️⃣ Define reusable component classes using your variables */
+@layer components {
+  .font-outfit { font-family: var(--font-Outfit) }
+  .font-ovo    { font-family: var(--font-Ovo) }
+
+  .shadow-black { box-shadow: var(--box-shadow-black) }
+  .shadow-white { box-shadow: var(--box-shadow-white) }
 }
